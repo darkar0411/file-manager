@@ -1,0 +1,46 @@
+from tkinter import ttk, Menu
+
+
+class Button(ttk.Button):
+
+    def __init__(self, master, text='This is Button..!', grid: dict = None, state: str = None, command=None):
+        super().__init__(master, text=text, state=state, command=command)
+        self.grid(**grid)
+
+
+class CheckButton(ttk.Checkbutton):
+
+    def __init__(self, master, text='This is Checkbutton..!', grid: dict = None, variable=None, command=None):
+        super().__init__(master, text=text, variable=variable, command=command)
+        self.grid(**grid)
+
+
+class Container(ttk.LabelFrame):
+
+    def __init__(self, master, text: str = None, grid: dict = None):
+        super().__init__(master, text=text)
+        self.grid(**grid)
+
+
+class Table(ttk.Treeview):
+
+    def __init__(self, master, columns=None, grid: dict = None, width=False, **kwargs):
+        super().__init__(master, columns=columns, show='headings')
+        self.grid(**grid)
+        self.config(**kwargs)
+
+        for column in columns:
+            self.heading(column, text=column)
+            self.column(column, width=width[columns.index(column)] if width else 100)
+
+
+class AppMenu(Menu):
+
+    def __init__(self, master, commands: dict = None):
+        super().__init__(master)
+        self.commands = commands
+
+        for command in self.commands.keys():
+            self.add_command(label=command, command=self.commands[command])
+
+        master.config(menu=self)
