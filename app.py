@@ -41,9 +41,27 @@ class App(Base):
                 'padx': 3, 'pady': 3
             }, command=lambda btn=btn: self.handler_btn_type(btn))
 
-        # btn check subfolders
-        self.subf_btn = CheckButton(self, 'Include subfolders', {
+        # container btn check
+        self.ct_btn_check = Container(self, 'Tools', {
             'row': 2, 'column': 0, 'sticky': 'nsew',
+            'padx': 5, 'pady': 5
+        })
+
+        # btn check subfolders
+        self.subf_btn = CheckButton(self.ct_btn_check, 'Include subfolders', {
+            'row': 2, 'column': 0, 'sticky': 'nsew',
+            'padx': 5, 'pady': 5
+        }, variable=self.STATE)
+
+        # btn check copy
+        self.copy_btn = CheckButton(self.ct_btn_check, 'Copy files', {
+            'row': 2, 'column': 1, 'sticky': 'nsew',
+            'padx': 5, 'pady': 5
+        }, variable=self.STATE)
+
+        # btn check move
+        self.move_btn = CheckButton(self.ct_btn_check, 'Move files', {
+            'row': 2, 'column': 2, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
         }, variable=self.STATE)
 
