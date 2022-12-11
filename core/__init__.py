@@ -24,6 +24,11 @@ class Base(Tk):
         self.BUTTONS = self.get_info('files')
         self.LABELS = self.get_info('files').keys()
         self.STATE = IntVar
+        self.OP_BTNS = True if self.__get_config('OP_BTNS') == 'True' else False
+
+        # key bindings - exit ESC
+        self.bind('<Escape>', lambda e: self.destroy())
+
 
     def send_about(self):
         webbrowser.open(self.ABOUT)
@@ -34,5 +39,17 @@ class Base(Tk):
                 read = json.load(f)
             return read
 
+        except Exception as e:
+            print('Error: ', e)
+    
+    def __get_config(self, opt):
+        try:
+            with open('./config.conf', 'r') as f:
+                read = f.read()
+
+                # parse config
+                for line in read.split('\n'):
+                    if line.startswith(opt):
+                        return str(line.split('=')[1])
         except Exception as e:
             print('Error: ', e)

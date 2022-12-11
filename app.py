@@ -1,5 +1,5 @@
 from core import Base
-from core.components import Button, Container, CheckButton, Table, AppMenu
+from core.components import Button, Container, CheckButton, Table, AppMenu, MenuButton
 from view.config import Config
 from view.plugins import Plugins
 
@@ -36,10 +36,13 @@ class App(Base):
         for btn in p_btn.keys():
             row = p_btn[btn][0]
             column = p_btn[btn][1]
-            globals()[btn] = Button(self.stf_btn, btn, {
+            grid = {
                 'row': row, 'column': column, 'sticky': 'nsew',
                 'padx': 3, 'pady': 3
-            }, command=lambda btn=btn: self.handler_btn_type(btn))
+            }
+            globals()[btn] = Button(self.stf_btn, btn, grid=grid,
+                                    state='disabled') if self.OP_BTNS else MenuButton(
+                self.stf_btn, btn, grid=grid, options=self.BUTTONS[btn], state='disabled')
 
         # container btn check
         self.ct_btn_check = Container(self, 'Tools', {
@@ -91,9 +94,6 @@ class App(Base):
             'row': 0, 'column': 1, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
         })
-
-    def handler_btn_type(self, btn):
-        pass
 
 
 if __name__ == "__main__":

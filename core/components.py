@@ -52,3 +52,17 @@ class AppMenu(Menu):
             self.add_command(label=command, command=self.commands[command])
 
         master.config(menu=self)
+
+class MenuButton(ttk.Menubutton):
+    
+        def __init__(self, master, text='This is Menubutton..!', grid=None, options=None, state=None):
+            super().__init__(master, text=text, state=state)
+            self.grid(**grid)
+            self.menu = Menu(self, tearoff=0)
+            self['menu'] = self.menu
+    
+            for option in options:
+                self.menu.add_command(label=option)
+        
+        def __change_text(self, text):
+            self['text'] = text
