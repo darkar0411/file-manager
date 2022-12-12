@@ -1,4 +1,4 @@
-from core import Base, time, os
+from core import Base, time, os, glob, shutil
 from core.components import Button, Container, CheckButton, Table, AppMenu, MenuButton, Text
 from view.config import Config
 from view.plugins import Plugins
@@ -145,26 +145,49 @@ class App(Base):
             os.mkdir(f'{self.PATH}/{type_btn}')
 
         if subf == 1:
-            s_folders = self.find_subf()
+            s_folders = self.__find_subf()
             for subfolder in s_folders:
                 files = os.listdir(subfolder)
                 for file in files:
                     if move:
-                        self.move_file(file, subfolder, type_btn, ext)
+                        self.__move_file(file, subfolder, type_btn, ext)
                     elif copy:
-                        self.copy_file(file, subfolder, type_btn, ext)
+                        self.__copy_file(file, subfolder, type_btn, ext)
 
         for file in files:
-            if file.endswith(tuple(ext)):
-                if move:
-                    self.move_file(file, self.PATH, type_btn, ext)
-                elif copy:
-                    self.copy_file(file, self.PATH, type_btn, ext)
+            if move:
+                self.__move_file(file, self.PATH, type_btn, ext)
+            elif copy:
+                self.__copy_file(file, self.PATH, type_btn, ext)
 
         t_end = time.time()
         t = round(t_end - t_init, 2)
         # messagebox, process completed
         self.info_msg(msg=f'Process completed in {t} seconds.')
+
+    def __find_subf(self):
+        try:
+            folders = []
+            for folder in glob.glob(self.PATH + '/**/*', recursive=True):
+                if os.path.isdir(folder):
+                    folders.append(folder)
+            return folders
+        except Exception as e:
+            self.error_msg(msg=e)
+
+    def __move_file(self, file, path, type_btn, ext):
+        try:
+            if file.endswith(tuple(ext)):
+                shutil.move(f'{path}/{file}', f'{self.PATH}/{type_btn}/{file}')
+        except Exception as e:
+            print(e)
+
+    def __copy_file(self, file, path, type_btn, ext):
+        try:
+            if file.endswith(tuple(ext)):
+                shutil.copy(f'{path}/{file}', f'{self.PATH}/{type_btn}')
+        except Exception as e:
+            print(e)
 
 
 if __name__ == "__main__":

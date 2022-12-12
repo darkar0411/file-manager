@@ -60,30 +60,6 @@ class Base(Tk):
     def open_folder(self):
         self.PATH = filedialog.askdirectory()
 
-    def find_subf(self):
-        try:
-            folders = []
-            for folder in glob.glob(self.PATH + '/**/*', recursive=True):
-                if os.path.isdir(folder):
-                    folders.append(folder)
-            return folders
-        except Exception as e:
-            messagebox.showerror('Error', e)
-
-    def move_file(self, file, path, type_btn, ext):
-        try:
-            if file.endswith(tuple(ext)):
-                shutil.move(f'{path}/{file}', f'{self.PATH}/{type_btn}/{file}')
-        except Exception as e:
-            print(e)
-
-    def copy_file(self, file, path, type_btn, ext):
-        try:
-            if file.endswith(tuple(ext)):
-                shutil.copy(f'{path}/{file}', f'{self.PATH}/{type_btn}')
-        except Exception as e:
-            print(e)
-
     def warning_msg(self, active=None, msg=None):
         if active is not None:
             messagebox.showwarning('Warning', msg)
