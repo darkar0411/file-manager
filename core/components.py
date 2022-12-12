@@ -11,8 +11,15 @@ class Button(ttk.Button):
 class CheckButton(ttk.Checkbutton):
 
     def __init__(self, master, text='This is Checkbutton..!', grid: dict = None, variable=None, command=None):
-        super().__init__(master, text=text, variable=variable, command=command)
+        self.btn_state = variable()
+        super().__init__(master, text=text, variable=self.btn_state, command=command)
         self.grid(**grid)
+
+    def get_state(self):
+        return self.btn_state.get()
+
+    def set_state(self, state):
+        self.btn_state.set(state)
 
 
 class Container(ttk.LabelFrame):
@@ -31,7 +38,8 @@ class Table(ttk.Treeview):
 
         for column in columns:
             self.heading(column, text=column)
-            self.column(column, width=width[columns.index(column)] if width else 100)
+            self.column(
+                column, width=width[columns.index(column)] if width else 100)
 
 
 class AppMenu(Menu):
@@ -44,3 +52,24 @@ class AppMenu(Menu):
             self.add_command(label=command, command=self.commands[command])
 
         master.config(menu=self)
+
+
+class MenuButton(ttk.Menubutton):
+
+    def __init__(self, master, text='This is Menubutton..!', grid=None, options=None, state=None, command=None):
+        super().__init__(master, text=text, state=state)
+        self.grid(**grid)
+        self.menu = Menu(self, tearoff=0)
+        self['menu'] = self.menu
+
+        for option in options:
+            self.menu.add_command(
+                label=option, command=lambda text=option: command(text))
+
+
+class Text(ttk.Label):
+
+    def __init__(self, master, text='This is Label..!', grid=None, **kwargs):
+        super().__init__(master, text=text)
+        self.grid(**grid)
+        self.config(**kwargs)
