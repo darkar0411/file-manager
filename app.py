@@ -145,7 +145,6 @@ class App(Base):
             for file in file:
                 if file.endswith(tuple(ext)):
                     if copy:
-
                         shutil.copy(os.path.join(self.PATH, file),
                                     f'{self.PATH}/{type_btn}')
                     elif move:
