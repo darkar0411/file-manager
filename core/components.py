@@ -1,5 +1,6 @@
 from tkinter import ttk, Menu
 
+
 class Button(ttk.Button):
 
     def __init__(self, master, text='This is Button..!', grid: dict = None, state: str = None, command=None):

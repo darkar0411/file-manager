@@ -1,6 +1,5 @@
-from core import Base, glob, time, shutil, os
+from core import Base, time, os
 from core.components import Button, Container, CheckButton, Table, AppMenu, MenuButton, Text
-from tkinter import messagebox
 from view.config import Config
 from view.plugins import Plugins
 
@@ -58,7 +57,10 @@ class App(Base):
         self.subf_btn = CheckButton(self.ct_btn_check, 'Include subfolders', {
             'row': 2, 'column': 0, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
-        }, variable=self.STATE)
+        }, variable=self.STATE,
+            command=lambda msg='This option can take a long time, depending on the number of files and size': self.warning_msg(
+                active=self.subf_btn.get_state(), msg=msg
+        ))
 
         # btn check copy
         self.copy_btn = CheckButton(self.ct_btn_check, 'Copy files', {
@@ -120,15 +122,15 @@ class App(Base):
 
         # messagebox, copy - move one select
         if copy and move:
-            messagebox.showerror('Error', 'Select one option')
+            self.error_msg(msg='Select only one option (copy or move)')
             return
 
         if not copy and not move:
-            messagebox.showerror('Error', 'Select move or copy')
+            self.error_msg(msg='Select one option (copy or move)')
             return
 
         types = self.get_info('files')
-        file = os.listdir(self.PATH)
+        files = os.listdir(self.PATH)
         try:
             # add extension .upper()
             ext = types[type_btn]
@@ -141,22 +143,28 @@ class App(Base):
 
         if not os.path.exists(f'{self.PATH}/{type_btn}'):  # if folder not exists
             os.mkdir(f'{self.PATH}/{type_btn}')
-        try:
-            for file in file:
-                if file.endswith(tuple(ext)):
-                    if copy:
-                        shutil.copy(os.path.join(self.PATH, file),
-                                    f'{self.PATH}/{type_btn}')
-                    elif move:
-                        shutil.move(os.path.join(self.PATH, file),
-                                    f'{self.PATH}/{type_btn}')
-        except Exception as e:
-            messagebox.showerror('Error', e)
-            return
+
+        if subf == 1:
+            s_folders = self.find_subf()
+            for subfolder in s_folders:
+                files = os.listdir(subfolder)
+                for file in files:
+                    if move:
+                        self.move_file(file, subfolder, type_btn, ext)
+                    elif copy:
+                        self.copy_file(file, subfolder, type_btn, ext)
+
+        for file in files:
+            if file.endswith(tuple(ext)):
+                if move:
+                    self.move_file(file, self.PATH, type_btn, ext)
+                elif copy:
+                    self.copy_file(file, self.PATH, type_btn, ext)
 
         t_end = time.time()
-        messagebox.showinfo('Info',
-                            f'Files {type_btn} {"copied" if copy else "moved"} in {round(t_end - t_init, 3)} seconds')
+        t = round(t_end - t_init, 2)
+        # messagebox, process completed
+        self.info_msg(msg=f'Process completed in {t} seconds.')
 
 
 if __name__ == "__main__":
