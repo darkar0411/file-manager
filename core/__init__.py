@@ -1,8 +1,9 @@
 from os.path import dirname, basename, isfile
 import glob
-from tkinter import Tk, IntVar
+from tkinter import Tk, IntVar, filedialog
 import webbrowser
 import json
+
 
 modules = glob.glob(dirname(__file__) + "/*.py")
 
@@ -24,11 +25,11 @@ class Base(Tk):
         self.BUTTONS = self.get_info('files')
         self.LABELS = self.get_info('files').keys()
         self.STATE = IntVar
-        self.OP_BTNS = True if self.__get_config('OP_BTNS') == 'True' else False
+        self.OP_BTNS = True if self.__get_config(
+            'OP_BTNS') == 'True' else False
 
         # key bindings - exit ESC
         self.bind('<Escape>', lambda e: self.destroy())
-
 
     def send_about(self):
         webbrowser.open(self.ABOUT)
@@ -41,7 +42,7 @@ class Base(Tk):
 
         except Exception as e:
             print('Error: ', e)
-    
+
     def __get_config(self, opt):
         try:
             with open('./config.conf', 'r') as f:
@@ -53,3 +54,6 @@ class Base(Tk):
                         return str(line.split('=')[1])
         except Exception as e:
             print('Error: ', e)
+
+    def open_folder(self):
+        self.PATH = filedialog.askdirectory()
