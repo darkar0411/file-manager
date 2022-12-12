@@ -54,11 +54,12 @@ class App(Base):
         })
 
         # btn check subfolders
+        msg_subf = 'This option can take a long time, depending on the number of files and size'
         self.subf_btn = CheckButton(self.ct_btn_check, 'Include subfolders', {
             'row': 2, 'column': 0, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
         }, variable=self.STATE,
-            command=lambda msg='This option can take a long time, depending on the number of files and size': self.warning_msg(
+            command=lambda msg=msg_subf: self.warning_msg(
                 active=self.subf_btn.get_state(), msg=msg
         ))
 
@@ -165,6 +166,7 @@ class App(Base):
         # messagebox, process completed
         self.info_msg(msg=f'Process completed in {t} seconds.')
 
+    # more functions for handle events
     def __find_subf(self):
         try:
             folders = []
