@@ -1,6 +1,5 @@
 from tkinter import ttk, Menu
 
-
 class Button(ttk.Button):
 
     def __init__(self, master, text='This is Button..!', grid: dict = None, state: str = None, command=None):
@@ -72,3 +71,4 @@ class Text(ttk.Label):
     def __init__(self, master, text='This is Label..!', grid=None, **kwargs):
         super().__init__(master, text=text)
         self.grid(**grid)
+        self.config(**kwargs)

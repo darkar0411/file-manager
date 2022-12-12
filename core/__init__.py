@@ -3,7 +3,9 @@ import glob
 from tkinter import Tk, IntVar, filedialog
 import webbrowser
 import json
-
+import time
+import shutil
+import os
 
 modules = glob.glob(dirname(__file__) + "/*.py")
 

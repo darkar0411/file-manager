@@ -1,5 +1,6 @@
-from core import Base
+from core import Base, glob, time, shutil, os
 from core.components import Button, Container, CheckButton, Table, AppMenu, MenuButton, Text
+from tkinter import messagebox
 from view.config import Config
 from view.plugins import Plugins
 
@@ -111,7 +112,52 @@ class App(Base):
                 globals()[btn].config(state='normal')
 
     def handle_stf_btn(self, type_btn):
-        print(type_btn)
+        # get copy - move - subfolders
+        t_init = time.time()
+        copy = self.copy_btn.get_state()
+        move = self.move_btn.get_state()
+        subf = self.subf_btn.get_state()
+
+        # messagebox, copy - move one select
+        if copy and move:
+            messagebox.showerror('Error', 'Select one option')
+            return
+
+        if not copy and not move:
+            messagebox.showerror('Error', 'Select move or copy')
+            return
+
+        types = self.get_info('files')
+        file = os.listdir(self.PATH)
+        try:
+            # add extension .upper()
+            ext = types[type_btn]
+            for i in range(len(ext)):
+                ext.append(ext[i].upper())
+
+        except KeyError:
+            ext = [type_btn, type_btn.upper()]
+            type_btn = type_btn.split('.')[1]
+
+        if not os.path.exists(f'{self.PATH}/{type_btn}'):  # if folder not exists
+            os.mkdir(f'{self.PATH}/{type_btn}')
+        try:
+            for file in file:
+                if file.endswith(tuple(ext)):
+                    if copy:
+
+                        shutil.copy(os.path.join(self.PATH, file),
+                                    f'{self.PATH}/{type_btn}')
+                    elif move:
+                        shutil.move(os.path.join(self.PATH, file),
+                                    f'{self.PATH}/{type_btn}')
+        except Exception as e:
+            messagebox.showerror('Error', e)
+            return
+
+        t_end = time.time()
+        messagebox.showinfo('Info',
+                            f'Files {type_btn} {"copied" if copy else "moved"} in {round(t_end - t_init, 3)} seconds')
 
 
 if __name__ == "__main__":
