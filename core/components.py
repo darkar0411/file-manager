@@ -10,9 +10,9 @@ class Button(ttk.Button):
 
 class CheckButton(ttk.Checkbutton):
 
-    def __init__(self, master, text='This is Checkbutton..!', grid: dict = None, variable=None, command=None):
+    def __init__(self, master, text, grid, variable=None, event=None):
         self.btn_state = variable()
-        super().__init__(master, text=text, variable=self.btn_state, command=command)
+        super().__init__(master, text=text, variable=self.btn_state)
         self.grid(**grid)
 
     def get_state(self):
@@ -44,7 +44,7 @@ class Table(ttk.Treeview):
 
 class AppMenu(Menu):
 
-    def __init__(self, master, commands: dict = None):
+    def __init__(self, master, commands):
         super().__init__(master)
         self.commands = commands
 

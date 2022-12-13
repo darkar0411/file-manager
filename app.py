@@ -1,5 +1,9 @@
-from core import Base, time, os, glob, shutil
-from core.components import Button, Container, CheckButton, Table, AppMenu, MenuButton, Text
+from core import Base, glob
+import os
+import shutil
+import time
+from core.components import Button, Container, CheckButton
+from core.components import Table, AppMenu, MenuButton, Text
 from view.config import Config
 from view.plugins import Plugins
 
@@ -8,6 +12,7 @@ class App(Base):
 
     def __init__(self):
         super().__init__()
+        self.txt_path = None
         self.title("File Manager")
         self.resizable(False, False)
 
@@ -32,38 +37,35 @@ class App(Base):
         })
 
         # btn´s select types - position
-        self.p_btn = self.get_info('position')['buttons']
-        for btn in self.p_btn.keys():
-            row = self.p_btn[btn][0]
-            column = self.p_btn[btn][1]
+        self.p_btn = self.CONFIG['btn-position']
+        for btn in self.LABELS:
             grid = {
-                'row': row, 'column': column, 'sticky': 'nsew',
-                'padx': 3, 'pady': 3
+                'row': self.p_btn[btn][0], 'column': self.p_btn[btn][1],
+                'sticky': 'nsew', 'padx': 3, 'pady': 3
             }
+            if self.OP_BTNS:
+                globals()[btn] = Button(self.stf_btn, btn, grid=grid, state='disabled',
+                                        command=lambda btn=btn: self.handle_stf_btn(btn))
+            else:
+                globals()[btn] = MenuButton(self.stf_btn, btn, grid=grid,
+                                            options=self.BUTTONS[btn], state='disabled',
+                                            command=lambda btn=self.BUTTONS[btn]: self.handle_stf_btn(btn))
 
-            globals()[btn] = Button(self.stf_btn, btn, grid=grid,
-                                    state='disabled',
-                                    command=lambda btn=btn: self.handle_stf_btn(btn)) if self.OP_BTNS else MenuButton(
-                self.stf_btn, btn, grid=grid, options=self.BUTTONS[btn],
-                state='disabled', command=lambda btn=self.BUTTONS[btn]: self.handle_stf_btn(btn))
-
-        # container btn check
+        # container btn´s check´s
         self.ct_btn_check = Container(self, 'Tools', {
             'row': 3, 'column': 0, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
         })
 
         # btn check subfolders
-        msg_subf = 'This option can take a long time, depending on the number of files and size'
+        # msg_sbf = 'This option can take a long time, depending on the number of files and size.'
         self.subf_btn = CheckButton(self.ct_btn_check, 'Include subfolders', {
             'row': 2, 'column': 0, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
-        }, variable=self.STATE,
-            command=lambda msg=msg_subf: self.warning_msg(
-                active=self.subf_btn.get_state(), msg=msg
-        ))
+        }, variable=self.STATE)
 
         # btn check copy
+        # msg_cp = 'Copying files can take a long time, depending on the number of files and size.'
         self.copy_btn = CheckButton(self.ct_btn_check, 'Copy files', {
             'row': 2, 'column': 1, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
@@ -75,13 +77,13 @@ class App(Base):
             'padx': 5, 'pady': 5
         }, variable=self.STATE)
 
-        # table routes recents
+        # table routes recent´s
         self.table = Table(self, ('Route', 'Date'), {
             'row': 4, 'column': 0, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
         }, [190, 60], height=5)
 
-        # container buttons table
+        # container button´s table
         self.ct_btn = Container(self, 'Actions', {
             'row': 5, 'column': 0, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
@@ -102,8 +104,7 @@ class App(Base):
             'padx': 10, 'pady': 5
         })
 
-    # handle events
-
+    # handle event´s
     def handle_sf_btn(self):
         self.open_folder()
         if self.PATH:
@@ -130,7 +131,7 @@ class App(Base):
             self.error_msg(msg='Select one option (copy or move)')
             return
 
-        types = self.get_info('files')
+        types = self.read_json('/data', 'files')
         files = os.listdir(self.PATH)
         try:
             # add extension .upper()
@@ -146,8 +147,7 @@ class App(Base):
             os.mkdir(f'{self.PATH}/{type_btn}')
 
         if subf == 1:
-            s_folders = self.__find_subf()
-            for subfolder in s_folders:
+            for subfolder in self.__find_subf():
                 files = os.listdir(subfolder)
                 for file in files:
                     if move:
@@ -190,8 +190,3 @@ class App(Base):
                 shutil.copy(f'{path}/{file}', f'{self.PATH}/{type_btn}')
         except Exception as e:
             print(e)
-
-
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
