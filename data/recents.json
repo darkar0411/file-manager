@@ -1,8 +1,17 @@
 {
-  "path": [
-	"D:/Descargas"
-  ],
-  "date": [
-	"09/12/2022"
-  ]
+    "route": [
+        "D:/Descargas",
+        "D:/Descargas",
+        "D:/Descargas"
+    ],
+    "accion": [
+        "Move",
+        "Move",
+        "Move"
+    ],
+    "file": [
+        ".ai",
+        ".pdf",
+        ".ai"
+    ]
 }

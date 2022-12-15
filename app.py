@@ -77,11 +77,12 @@ class App(Base):
             'padx': 5, 'pady': 5
         }, variable=self.STATE)
 
-        # table routes recent´s
-        self.table = Table(self, ('Route', 'Date'), {
+        # table routes Accion´s
+        self.table = Table(self, ('Route', 'Accions', 'File'), {
             'row': 4, 'column': 0, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
-        }, [190, 60], height=5)
+        }, [150, 15, 15], height=5)
+        self.__update_table()
 
         # container button´s table
         self.ct_btn = Container(self, 'Actions', {
@@ -92,14 +93,14 @@ class App(Base):
         self.ct_btn.columnconfigure(0, weight=1)
         self.ct_btn.columnconfigure(1, weight=1)
 
-        # btn select route
-        self.sr_btn = Button(self.ct_btn, 'Select Route', {
+        # btn select accion
+        self.sa_btn = Button(self.ct_btn, 'Select', {
             'row': 0, 'column': 0, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
-        })
+        }, command= lambda: self.__select_accion())
 
-        # btn delete route
-        self.dr_btn = Button(self.ct_btn, 'Delete Route', {
+        # btn delete accion
+        self.da_btn = Button(self.ct_btn, 'Delete', {
             'row': 0, 'column': 1, 'sticky': 'nsew',
             'padx': 10, 'pady': 5
         })
@@ -133,6 +134,8 @@ class App(Base):
 
         types = self.read_json('/data', 'files')
         files = os.listdir(self.PATH)
+        self.__save_accion(type_btn)
+
         try:
             # add extension .upper()
             ext = types[type_btn]
@@ -163,6 +166,7 @@ class App(Base):
 
         t_end = time.time()
         t = round(t_end - t_init, 2)
+
         # messagebox, process completed
         self.info_msg(msg=f'Process completed in {t} seconds.')
 
@@ -190,3 +194,54 @@ class App(Base):
                 shutil.copy(f'{path}/{file}', f'{self.PATH}/{type_btn}')
         except Exception as e:
             print(e)
+
+    def __save_accion(self, type_btn):
+        if self.copy_btn.get_state() == 1:
+            accion = 'Copy'
+        else:
+            accion = 'Move'
+
+        data = {
+            'route': self.PATH,
+            'accion': accion,
+            'file': type_btn
+        }
+
+        self.save_json('/data', 'recents', data)
+        self.__update_table()
+
+    def __update_table(self):
+        self.table.delete(*self.table.get_children())
+        data = self.read_json('/data', 'recents')
+        route = data['route'][::-1] # reverse list
+        accion = data['accion'][::-1]
+        file = data['file'][::-1]
+
+        for i in range(0, 5):
+            try:
+                self.table.insert('', 'end', text=i, values=(route[i], accion[i], file[i]))
+            except IndexError:
+                pass
+    
+    def __select_accion(self):
+        item = self.table.selection()[0]
+        route = self.table.item(item, 'values')[0]
+        accion = self.table.item(item, 'values')[1]
+        file = self.table.item(item, 'values')[2]
+
+        if accion == 'Copy':
+            self.copy_btn.set_state(1)
+            self.move_btn.set_state(0)
+
+        else:
+            self.copy_btn.set_state(0)
+            self.move_btn.set_state(1)
+        
+        self.PATH = route
+
+        self.handle_stf_btn(file)
+        
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
