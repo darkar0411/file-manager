@@ -1,4 +1,7 @@
 ### task list
 - default route for send files
-- plugins
-- check 
+- check update
+- create core plugins
+### plugins
+- resizable imgs
+- rename
