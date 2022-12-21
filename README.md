@@ -1,5 +1,5 @@
 ### dev
-[Task List](https://github.com/luisdanielta/file-manager/tree/task-list)
+[task list](https://github.com/luisdanielta/file-manager/tree/task-list)
 
 ### requirements
 python3 -m pip install -r requirements.txt
