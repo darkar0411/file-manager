@@ -5,3 +5,4 @@
 ### plugins
 - resizable imgs
 - rename
+- google drive
