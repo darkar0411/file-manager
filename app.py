@@ -97,7 +97,7 @@ class App(Base):
         self.sa_btn = Button(self.ct_btn, 'Select', {
             'row': 0, 'column': 0, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
-        }, command= lambda: self.__select_accion())
+        }, command=lambda: self.__select_accion())
 
         # btn delete accion
         self.da_btn = Button(self.ct_btn, 'Delete', {
@@ -134,7 +134,6 @@ class App(Base):
 
         types = self.read_json('/data', 'files')
         files = os.listdir(self.PATH)
-        self.__save_accion(type_btn)
 
         try:
             # add extension .upper()
@@ -169,6 +168,7 @@ class App(Base):
 
         # messagebox, process completed
         self.info_msg(msg=f'Process completed in {t} seconds.')
+        # self.__save_accion()
 
     # more functions for handle events
     def __find_subf(self):
@@ -196,33 +196,29 @@ class App(Base):
             print(e)
 
     def __save_accion(self, type_btn):
-        if self.copy_btn.get_state() == 1:
-            accion = 'Copy'
-        else:
-            accion = 'Move'
+        accion = "copy" if self.copy_btn.get_state() else "move"
 
-        data = {
+        self.save_json('/data', 'recents', {
             'route': self.PATH,
             'accion': accion,
             'file': type_btn
-        }
-
-        self.save_json('/data', 'recents', data)
+        })
         self.__update_table()
 
     def __update_table(self):
         self.table.delete(*self.table.get_children())
         data = self.read_json('/data', 'recents')
-        route = data['route'][::-1] # reverse list
+        route = data['route'][::-1]  # reverse list
         accion = data['accion'][::-1]
         file = data['file'][::-1]
 
         for i in range(0, 5):
             try:
-                self.table.insert('', 'end', text=i, values=(route[i], accion[i], file[i]))
+                self.table.insert('', 'end', text=i, values=(
+                    route[i], accion[i], file[i]))
             except IndexError:
                 pass
-    
+
     def __select_accion(self):
         item = self.table.selection()[0]
         route = self.table.item(item, 'values')[0]
@@ -236,11 +232,11 @@ class App(Base):
         else:
             self.copy_btn.set_state(0)
             self.move_btn.set_state(1)
-        
+
         self.PATH = route
 
         self.handle_stf_btn(file)
-        
+
 
 if __name__ == "__main__":
     app = App()

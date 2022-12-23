@@ -43,11 +43,10 @@ class Base(Tk):
         
         with open(f'.{folder}/{file}.json', 'w') as f:
             json.dump(old_data, f, indent=4)
-        
 
-        
 
-   
+    def delete_json(self, folder, file, item):
+        pass
    
     def open_folder(self):
         self.PATH = filedialog.askdirectory()
