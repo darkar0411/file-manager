@@ -1,6 +1,6 @@
-txt = 'ai'
+import threading
+import time
 
-if '.' in txt:
-    print('yes')
-else:
-    print('no')
+time.sleep(2)
+print("core 1")
+core2 = threading.Thread(target=print("core 2"))

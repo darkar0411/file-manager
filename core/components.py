@@ -73,3 +73,7 @@ class Text(ttk.Label):
         super().__init__(master, text=text)
         self.grid(**grid)
         self.config(**kwargs)
+
+
+class Image:
+    pass

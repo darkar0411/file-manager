@@ -3,6 +3,8 @@ import glob
 from tkinter import Tk, IntVar, filedialog, messagebox
 import webbrowser
 import json
+import requests
+from typing import Optional
 
 
 class Base(Tk):
@@ -51,6 +53,7 @@ class Base(Tk):
     def open_folder(self):
         self.PATH = filedialog.askdirectory()
 
+    # msg
     def warning_msg(self, msg=None):
         messagebox.showwarning('Warning', msg)
 
@@ -59,6 +62,10 @@ class Base(Tk):
 
     def info_msg(self, msg=None):
         messagebox.showinfo('Info', msg)
+    
+    # requests
+    def fetch(self, url:str):
+        return requests.get(url).json()
 
 
 modules = glob.glob(dirname(__file__) + "/*.py")
