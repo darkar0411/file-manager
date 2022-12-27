@@ -1,6 +1,5 @@
 altgraph==0.17.2
 autopep8==2.0.0
-certifi @ file:///croot/certifi_1665076670883/work/certifi
 charset-normalizer==2.1.1
 future==0.18.2
 idna==3.4
