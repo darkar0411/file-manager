@@ -13,7 +13,7 @@ class App(Base):
     def __init__(self):
         super().__init__()
         self.txt_path = None
-        self.title("File Manager")
+        self.title('File Manager')
         self.resizable(False, False)
 
         # menu
@@ -145,7 +145,7 @@ class App(Base):
             ext = [type_btn, type_btn.upper()]
             type_btn = type_btn.split('.')[1]
 
-        if not os.path.exists(f'{self.PATH}/{type_btn}'):  # if folder not exists
+        if not os.path.exists(f'{self.PATH}/{type_btn}'):
             os.mkdir(f'{self.PATH}/{type_btn}')
 
         if subf == 1:
@@ -170,7 +170,7 @@ class App(Base):
         self.info_msg(msg=f'Process completed in {t} seconds.')
         # self.__save_accion()
 
-    # more functions for handle events
+    # !--- more functions for handle events ---!
     def __find_subf(self):
         try:
             folders = []
@@ -214,7 +214,7 @@ class App(Base):
 
         for i in range(0, 5):
             try:
-                self.table.insert('', 'end', text=i, values=(
+                self.table.insert('', 'end', text=str(i), values=(
                     route[i], accion[i], file[i]))
             except IndexError:
                 pass
@@ -234,7 +234,6 @@ class App(Base):
             self.move_btn.set_state(1)
 
         self.PATH = route
-
         self.handle_stf_btn(file)
 
 

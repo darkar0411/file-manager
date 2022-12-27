@@ -1,17 +1,10 @@
 {
-    "route": [
-        "D:/Descargas",
-        "D:/Descargas",
-        "D:/Descargas"
-    ],
-    "accion": [
-        "Move",
-        "Move",
-        "Move"
-    ],
-    "file": [
-        ".ai",
-        ".pdf",
-        ".ai"
-    ]
+  "id": [
+  ],
+  "route": [
+  ],
+  "accion": [
+  ],
+  "file": [
+  ]
 }

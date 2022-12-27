@@ -3,9 +3,6 @@ import glob
 from tkinter import Tk, IntVar, filedialog, messagebox
 import webbrowser
 import json
-import requests
-from typing import Optional
-
 
 class Base(Tk):
     OS: str
@@ -25,7 +22,7 @@ class Base(Tk):
 
     def send_about(self):
         webbrowser.open(self.ABOUT)
-
+        
     def read_json(self, folder='/', file=None):
         try:
             with open(f'.{folder}/{file}.json', 'r') as f:
@@ -65,8 +62,7 @@ class Base(Tk):
     
     # requests
     def fetch(self, url:str):
-        return requests.get(url).json()
-
+        pass
 
 modules = glob.glob(dirname(__file__) + "/*.py")
 

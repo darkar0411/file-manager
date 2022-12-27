@@ -20,6 +20,3 @@ class Plugins(Base):
         self.btn_install = Button(self, "Install", {
             "row":1, "column":0
         })
-    
-    def __update_table(sefl):
-        pass
