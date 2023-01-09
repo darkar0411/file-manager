@@ -16,6 +16,13 @@ class App(Base):
         self.title('File Manager')
         self.resizable(False, False)
 
+        # config
+
+        if self.CONFIG['btn-opt-style'] == "false":
+            self.OP_BTNS = False
+        else:
+            self.OP_BTNS = True
+
         # menu
         self.menu = AppMenu(self, {
             'Config': Config,
@@ -168,7 +175,7 @@ class App(Base):
 
         # messagebox, process completed
         self.info_msg(msg=f'Process completed in {t} seconds.')
-        # self.__save_accion()
+        #self.__save_accion(type_btn)
 
     # !--- more functions for handle events ---!
     def __find_subf(self):

@@ -1,21 +1,25 @@
 from core import Base
 from core.components import Button, Text, CheckButton, Container
+import json
 
 
 class Config(Base):
     FILE: str = 'config'
 
+
     def __init__(self):
         super().__init__()
         self.title('config - app')
-        self.geometry('400x400')
 
-        self.ec_ctn = Container(self, text='UI - exchange', grid={
-            'row': 0, 'column': 0, 'sticky': 'nsew', 'padx': 10, 'pady': 10
-        })
-        self.cg_btn = Button(self.ec_ctn, text='change btn', grid={
-            'row': 0, 'column': 0, 'sticky': 'nsew', 'padx': 5, 'pady': 5
-        }, command=self.handle_cg_btn)
-
-    def handle_cg_btn(self):
-        print(self.read_json(file=self.FILE)['btn-opt-style'])
+        self.opn_btn = Button(self, 'change type btn', {
+            'row': 0, 'column': 0
+        }, command=self.handle_opn_btn)
+        
+    def handle_opn_btn(self):
+        inf = self.read_json(file=self.FILE)
+        inf['btn-opt-style'] = 'true' if inf['btn-opt-style'] == 'false' else 'false'
+        with open('./config.json', 'w') as f:
+            json.dump(inf, f, indent=4)
+        
+        self.info_msg('please restart the app')
+        

@@ -1,37 +1,37 @@
 {
-  "btn-opt-style": false,
-  "btn-position": {
-	"video": [
-	  0,
-	  0
-	],
-	"image": [
-	  0,
-	  1
-	],
-	"adobe": [
-	  0,
-	  2
-	],
-	"audio": [
-	  0,
-	  3
-	],
-	"document": [
-	  0,
-	  4
-	],
-	"compressed": [
-	  1,
-	  0
-	],
-	"program": [
-	  1,
-	  1
-	],
-	"other": [
-	  1,
-	  2
-	]
-  }
+    "btn-opt-style": "false",
+    "btn-position": {
+        "video": [
+            0,
+            0
+        ],
+        "image": [
+            0,
+            1
+        ],
+        "adobe": [
+            0,
+            2
+        ],
+        "audio": [
+            0,
+            3
+        ],
+        "document": [
+            0,
+            4
+        ],
+        "compressed": [
+            1,
+            0
+        ],
+        "program": [
+            1,
+            1
+        ],
+        "other": [
+            1,
+            2
+        ]
+    }
 }

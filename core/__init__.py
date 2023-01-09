@@ -15,7 +15,6 @@ class Base(Tk):
         self.LABELS = self.BUTTONS.keys()
         self.STATE = IntVar
         self.CONFIG = self.read_json(file='config')
-        self.OP_BTNS = self.CONFIG['btn-opt-style']
 
         # key bindings - exit ESC
         self.bind('<Escape>', lambda e: self.destroy())
