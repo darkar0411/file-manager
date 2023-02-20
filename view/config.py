@@ -12,7 +12,7 @@ class Config(Base):
         self.title('config - app')
 
         self.opn_btn = Button(self, 'change type btn', {
-            'row': 0, 'column': 0
+            'row': 0, 'column': 0, 'sticky': 'nsew', 'padx': 50, 'pady': 50
         }, command=self.handle_opn_btn)
         
     def handle_opn_btn(self):

@@ -32,13 +32,12 @@ class Base(Tk):
             print('Error: ', e)
     
     def save_json(self, folder='/', file=None, data=None):
-       
         old_data = self.read_json(folder, file)
         labels = old_data.keys()
 
         for label in labels:
             old_data[label].append(data[label])
-        
+
         with open(f'.{folder}/{file}.json', 'w') as f:
             json.dump(old_data, f, indent=4)
 

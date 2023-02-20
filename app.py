@@ -132,11 +132,11 @@ class App(Base):
 
         # messagebox, copy - move one select
         if copy and move:
-            self.error_msg(msg='Select only one option (copy or move)')
+            self.error_msg(msg='Select only an option (copy or move)')
             return
 
         if not copy and not move:
-            self.error_msg(msg='Select one option (copy or move)')
+            self.error_msg(msg='Select an option (copy or move)')
             return
 
         types = self.read_json('/data', 'files')
@@ -179,19 +179,20 @@ class App(Base):
 
     # !--- more functions for handle events ---!
     def __find_subf(self):
+        folders = []
         try:
-            folders = []
             for folder in glob.glob(self.PATH + '/**/*', recursive=True):
                 if os.path.isdir(folder):
-                    folders.append(folder)
-            return folders
+                    if os.path.basename(folder) != '':
+                        folders.append(folder)
         except Exception as e:
-            self.error_msg(msg=e)
+            print(f'Error: {e}')
+        return folders
 
     def __move_file(self, file, path, type_btn, ext):
         try:
             if file.endswith(tuple(ext)):
-                shutil.move(f'{path}/{file}', f'{self.PATH}/{type_btn}/{file}')
+                shutil.move(f'{path}/{file}', f'{path}/{type_btn}/{file}')
         except Exception as e:
             print(e)
 
@@ -200,7 +201,7 @@ class App(Base):
             if file.endswith(tuple(ext)):
                 shutil.copy(f'{path}/{file}', f'{self.PATH}/{type_btn}')
         except Exception as e:
-            print(e)
+            print(f'Error copying file {file}: {e}')
 
     def __save_accion(self, type_btn):
         accion = "copy" if self.copy_btn.get_state() else "move"

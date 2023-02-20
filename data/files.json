@@ -60,7 +60,11 @@
 	".zip",
 	".rar",
 	".7z",
-	".tar"
+	".tar",
+	".img",
+	".iso",
+	".dmg",
+	".pkg"
   ],
   "program": [
 	".exe",
