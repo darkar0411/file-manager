@@ -123,7 +123,6 @@ class App(Base):
             for btn in self.p_btn.keys():
                 globals()[btn].config(state='normal')
 
-
     def handle_stf_btn(self, type_btn):
         # get copy - move - subfolders
         t_init = time.time()
@@ -192,7 +191,7 @@ class App(Base):
     def __move_file(self, file, path, type_btn, ext):
         try:
             if file.endswith(tuple(ext)):
-                shutil.move(f'{path}/{file}', f'{path}/{type_btn}/{file}')
+                shutil.move(f'{path}/{file}', f'{self.PATH}/{type_btn}/{file}')
         except Exception as e:
             print(e)
 
@@ -201,7 +200,7 @@ class App(Base):
             if file.endswith(tuple(ext)):
                 shutil.copy(f'{path}/{file}', f'{self.PATH}/{type_btn}')
         except Exception as e:
-            print(f'Error copying file {file}: {e}')
+            print(e)
 
     def __save_accion(self, type_btn):
         accion = "copy" if self.copy_btn.get_state() else "move"
