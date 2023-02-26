@@ -123,6 +123,7 @@ class App(Base):
             for btn in self.p_btn.keys():
                 globals()[btn].config(state='normal')
 
+
     def handle_stf_btn(self, type_btn):
         # get copy - move - subfolders
         t_init = time.time()
@@ -132,11 +133,11 @@ class App(Base):
 
         # messagebox, copy - move one select
         if copy and move:
-            self.error_msg(msg='Select only an option (copy or move)')
+            self.error_msg(msg='Select only one option (copy or move)')
             return
 
         if not copy and not move:
-            self.error_msg(msg='Select an option (copy or move)')
+            self.error_msg(msg='Select one option (copy or move)')
             return
 
         types = self.read_json('/data', 'files')
@@ -179,15 +180,14 @@ class App(Base):
 
     # !--- more functions for handle events ---!
     def __find_subf(self):
-        folders = []
         try:
+            folders = []
             for folder in glob.glob(self.PATH + '/**/*', recursive=True):
                 if os.path.isdir(folder):
-                    if os.path.basename(folder) != '':
-                        folders.append(folder)
+                    folders.append(folder)
+            return folders
         except Exception as e:
-            print(f'Error: {e}')
-        return folders
+            self.error_msg(msg=e)
 
     def __move_file(self, file, path, type_btn, ext):
         try:
