@@ -1,6 +1,7 @@
+import git
+import os
 from core import Base
-from core.components import Table, Text, Button
-import git, os
+from core.components import Table, Button
 
 
 class Plugins(Base):
@@ -60,4 +61,3 @@ class Plugins(Base):
 
     def __validate_install(self, name: str):
         return os.path.exists(f"plugins/{name}")
-
