@@ -28,7 +28,7 @@ class Plugins(Base):
         self.uninstall = Button(self, "Uninstall", {
             'row': 1, 'column': 1, 'sticky': 'nsew',
             'padx': 5, 'pady': 5
-        })
+        }, command=self.__handle_uninstall)
 
     def __update_table(self):
         self.table.delete(*self.table.get_children())
@@ -57,7 +57,20 @@ class Plugins(Base):
             self.error_msg(msg=e)
 
     def __handle_uninstall(self):
-        pass
+        item_id = self.table.selection()[0]
+        item = self.table.item(item_id, 'values')
+        name = item[0]
 
-    def __validate_install(self, name: str):
+        if not self.__validate_install(name):
+            self.error_msg(msg="Plugin not installed")
+            return
+
+        try:
+            os.remove(f"plugins/{name}")
+            self.info_msg(msg="Plugin uninstalled successfully")
+        except Exception as e:
+            self.error_msg(msg=e)
+
+    @staticmethod
+    def __validate_install(name: str):
         return os.path.exists(f"plugins/{name}")
