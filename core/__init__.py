@@ -3,6 +3,8 @@ import glob
 from tkinter import Tk, IntVar, filedialog, messagebox
 import webbrowser
 import json
+import requests
+
 
 class Base(Tk):
     OS: str
@@ -21,7 +23,7 @@ class Base(Tk):
 
     def send_about(self):
         webbrowser.open(self.ABOUT)
-        
+
     def read_json(self, folder='/', file=None):
         try:
             with open(f'.{folder}/{file}.json', 'r') as f:
@@ -30,7 +32,7 @@ class Base(Tk):
 
         except Exception as e:
             print('Error: ', e)
-    
+
     def save_json(self, folder='/', file=None, data=None):
         old_data = self.read_json(folder, file)
         labels = old_data.keys()
@@ -41,10 +43,9 @@ class Base(Tk):
         with open(f'.{folder}/{file}.json', 'w') as f:
             json.dump(old_data, f, indent=4)
 
-
     def delete_json(self, folder, file, item):
         pass
-   
+
     def open_folder(self):
         self.PATH = filedialog.askdirectory()
 
@@ -57,10 +58,15 @@ class Base(Tk):
 
     def info_msg(self, msg=None):
         messagebox.showinfo('Info', msg)
-    
+
     # requests
-    def fetch(self, url:str):
-        pass
+    def fetch(self, url: str):
+        try:
+            r = requests.get(url)
+            return r.json()
+        except Exception as e:
+            print(e)
+
 
 modules = glob.glob(dirname(__file__) + "/*.py")
 
